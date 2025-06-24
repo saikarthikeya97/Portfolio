@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sai Karthikeya Portfolio</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@800&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #00BFA6;
+            --accent: #FF6584;
+            --yellow: #FFC107;
+            --pink: #FF1493;
+            --blue: #1E90FF;
+            --dark: #121212;
+            --darker: #2E3537;
+            /* Original dark background */
+            --light: #F5F5F5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar Below Header */
+        nav {
+            max-width: 1500px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: rgba(18, 18, 18, 0.9);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            transform: translateZ(60px);
+        }
+
+        .nav-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.4));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .nav-btn:hover::before {
+            opacity: 1;
+        }
+
+        .nav-btn:hover {
+            transform: translateZ(60px) translateY(-8px) scale(1.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            filter: brightness(1.2);
+        }
+
+        /* Enhanced 3D Animated Background */
+        #threejs-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        /* Simplified Gradient Overlay */
+        .color-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(108, 99, 255, 0.1) 0%, transparent 60%);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Header Section with No Effects */
+        header {
+            max-width: 1500px;
+            margin: 6rem auto 2rem auto;
+            padding: 5rem;
+            background: rgba(18, 18, 18, 0.75);
+            backdrop-filter: blur(25px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(3.5rem, 9vw, 7rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            max-width: 900px;
+            margin-bottom: 3.5rem;
+            opacity: 0.9;
+        }
+
+        /* Enhanced 3D Floating Buttons */
+        .btn-container {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            transform-style: preserve-3d;
+        }
+
+        .btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            transform: translateZ(60px);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--pink));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--secondary), var(--blue));
+            color: white;
+        }
+
+        .btn-tertiary {
+            background: linear-gradient(45deg, var(--accent), var(--yellow));
+            color: var(--dark);
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.4));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn:hover {
+            transform: translateZ(60px) translateY(-8px) scale(1.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            filter: brightness(1.2);
+        }
+
+        /* 3D Card Sections with Reduced Cursor Tilt */
+        section {
+            max-width: 1500px;
+            margin: 12rem auto;
+            padding: 5rem;
+            background: rgba(18, 18, 18, 0.75);
+            backdrop-filter: blur(25px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(1200px) rotateX(0deg) rotateY(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        section#projects {
+            margin-bottom: 18rem;
+        }
+
+        section:hover {
+            box-shadow: 0 30px 60px rgba(108, 99, 255, 0.4);
+        }
+
+        section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(108, 99, 255, 0.05), rgba(0, 191, 166, 0.05), rgba(255, 101, 132, 0.05));
+            z-index: -1;
+            animation: gradient-flow 10s infinite;
+        }
+
+        @keyframes gradient-flow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 3.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transform: translateZ(40px);
+            text-shadow: 0 0 15px rgba(108, 99, 255, 0.3);
+        }
+
+        /* Enhanced Skills Section */
+        #skills .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 3rem;
+            transform-style: preserve-3d;
+            padding: 2rem;
+        }
+
+        #skills .card {
+            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(10, 10, 10, 0.9));
+            border-radius: 2rem;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(30px) rotateX(0deg) rotateY(0deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        #skills .card.mern-stack {
+            border: 2px solid var(--primary);
+            background: linear-gradient(145deg, rgba(108, 99, 255, 0.2), rgba(0, 191, 166, 0.2));
+            box-shadow: 0 20px 50px rgba(108, 99, 255, 0.4);
+        }
+
+        #skills .card.mern-stack:hover {
+            transform: translateZ(80px) scale(1.1);
+            box-shadow: 0 30px 70px rgba(108, 99, 255, 0.6);
+            border: 2px solid var(--secondary);
+        }
+
+        #skills .card:hover {
+            transform: translateZ(60px) scale(1.05);
+            box-shadow: 0 25px 60px rgba(108, 99, 255, 0.5);
+            border: 1px solid rgba(108, 99, 255, 0.5);
+        }
+
+        #skills .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(108, 99, 255, 0.2), rgba(0, 191, 166, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.7s;
+        }
+
+        #skills .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        #skills .card i {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transform: translateZ(50px);
+        }
+
+        #skills .card.mern-stack i {
+            font-size: 4.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: icon-pulse 2s infinite;
+        }
+
+        @keyframes icon-pulse {
+            0% {
+                transform: translateZ(50px) scale(1);
+            }
+
+            50% {
+                transform: translateZ(50px) scale(1.1);
+            }
+
+            100% {
+                transform: translateZ(50px) scale(1);
+            }
+        }
+
+        #skills .card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            transform: translateZ(30px);
+        }
+
+        #skills .card p,
+        #skills .card ul {
+            transform: translateZ(20px);
+            opacity: 0.9;
+        }
+
+        /* Enhanced 3D Progress Bars */
+        .skill-meter {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+            transform: translateZ(15px);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .skill-progress {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 2s ease;
+            width: 0;
+            box-shadow: 0 0 15px currentColor;
+            animation: progress-glow 2s infinite alternate;
+        }
+
+        @keyframes progress-glow {
+            0% {
+                box-shadow: 0 0 15px currentColor;
+            }
+
+            100% {
+                box-shadow: 0 0 25px currentColor;
+            }
+        }
+
+        /* General Card Styles for Other Sections */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            transform-style: preserve-3d;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(18, 18, 18, 0.85), rgba(10, 10, 10, 0.85));
+            border-radius: 2rem;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(30px) rotateX(0deg) rotateY(0deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            transform: translateZ(60px) scale(1.05);
+            box-shadow: 0 25px 60px rgba(108, 99, 255, 0.5);
+            border: 1px solid rgba(108, 99, 255, 0.5);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(108, 99, 255, 0.15), rgba(0, 191, 166, 0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.7s;
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .card i {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transform: translateZ(40px);
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+            transform: translateZ(30px);
+        }
+
+        .card p,
+        .card ul {
+            transform: translateZ(20px);
+            opacity: 0.9;
+        }
+
+        /* Project Card Link */
+        .project-card {
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .project-card h3,
+        .project-card p {
+            color: var(--light);
+        }
+
+        /* Enhanced 3D Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2.5rem;
+            transform-style: preserve-3d;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
+            transform: translateZ(15px);
+            box-shadow: 0 0 25px rgba(108, 99, 255, 0.4);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2.5rem;
+            padding-left: 2.5rem;
+            transform: translateZ(30px);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateZ(50px) translateX(10px);
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -12px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid var(--secondary);
+            box-shadow: 0 0 20px rgba(108, 99, 255, 0.6);
+            transform: translateZ(40px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+
+            header,
+            section {
+                padding: 3rem;
+                margin: 6rem 1.5rem;
+            }
+
+            section#projects {
+                margin-bottom: 9rem;
+            }
+
+            header {
+                margin: 6rem 1.5rem 2rem 1.5rem;
+            }
+
+            nav {
+                margin: 2rem 1.5rem;
+                padding: 0.8rem;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: clamp(2.5rem, 7vw, 5rem);
+            }
+
+            header p {
+                font-size: clamp(1rem, 3vw, 1.4rem);
+            }
+
+            #skills .card-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Three.js Background -->
+    <div id="threejs-bg"></div>
+
+    <!-- Simplified Gradient Overlay -->
+    <div class="color-overlay"></div>
+
+    <!-- Header Section -->
+    <header id="home">
+        <h1>SAI KARTHIKEYA</h1>
+        <p>MERN Stack Developer | Web Design Enthusiast | Figma Explorer | AI Enthusiast</p>
+        <div class="btn-container">
+            <a href="https://www.linkedin.com/in/sai-karthikeya-690251259" class="btn btn-primary" target="_blank">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="mailto:karthikeya7098@gmail.com" class="btn btn-secondary">
+                <i class="fas fa-envelope"></i> Email Me
+            </a>
+            <a href="https://github.com/saikarthikeya97?tab=repositories" class="btn btn-tertiary" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-buttons">
+            <a href="#home" class="nav-btn">Home</a>
+            <a href="#about" class="nav-btn">About</a>
+            <a href="#skills" class="nav-btn">Skills</a>
+            <a href="#experience" class="nav-btn">Experience</a>
+            <a href="#education" class="nav-btn">Education</a>
+            <a href="#certifications" class="nav-btn">Certifications</a>
+            <a href="#projects" class="nav-btn">Projects</a>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>ABOUT ME</h2>
+        <div class="card" style="grid-column: 1/-1;">
+            <p style="transform: translateZ(20px);">
+                Ambitious B.Tech Student passionate about MERN Stack Development and Web Design.
+                Currently studying MERN Stack Development and Web Design to build dynamic,
+                user-friendly websites and applications. Exploring modern development frameworks
+                and sharpening design skills with Figma to create visually appealing, intuitive interfaces.
+            </p>
+            <p style="margin-top: 1.5rem; transform: translateZ(20px);">
+                Passionate about continuous learning and excited to apply skills to create innovative
+                and seamless web experiences that are both functional and beautiful. Always eager to
+                stay ahead of the curve and bring fresh ideas to the digital world!
+            </p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2>TOP SKILLS</h2>
+        <div class="card-grid">
+            <div class="card mern-stack">
+                <i class="fab fa-react"></i>
+                <h3>MERN Stack</h3>
+                <p>Proficient in building full-stack applications using MongoDB, Express.js, React, and Node.js.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 90%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fas fa-robot"></i>
+                <h3>AI Basics</h3>
+                <p>Foundational knowledge in AI concepts and applications.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--accent), var(--pink)); width: 75%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fas fa-users"></i>
+                <h3>Leadership</h3>
+                <p>Experienced in leading teams and driving collaborative projects.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--yellow), #FF8F00); width: 80%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fab fa-figma"></i>
+                <h3>UI Design</h3>
+                <p>Skilled in creating user-friendly interfaces using Figma.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--secondary), #20B2AA); width: 70%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fab fa-java"></i>
+                <h3>Java</h3>
+                <p>Competent in core Java programming.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--accent), var(--pink)); width: 75%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fas fa-code"></i>
+                <h3>C Language</h3>
+                <p>Strong foundation in C programming.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--primary), #8A2BE2); width: 80%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fab fa-python"></i>
+                <h3>Python</h3>
+                <p>Experienced in Python.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(90deg, var(--blue), var(--yellow)); width: 70%;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <i class="fab fa-git-alt"></i>
+                <h3>Git & GitHub</h3>
+                <p>Proficient in version control and collaborative development using Git.</p>
+                <div class="skill-meter">
+                    <div class="skill-progress"
+                        style="background: linear-gradient(45deg, var(--pink), var(--accent)); width: 65%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <h2>EXPERIENCE</h2>
+        <div class="card" style="grid-column: 1/-1;">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Campus Ambassador - Skill Intern</h3>
+                    <p style="color: var(--secondary); margin: 0.5rem 0;">Feb 2025 | Nellore, Andhra Pradesh, India</p>
+                    <p>Promoted the platform on campus, organized awareness campaigns, and increased student engagement
+                        through strategic outreach and collaboration.</p>
+                    <div style="margin-top: 1rem;">
+                        <span class="tag"
+                            style="background: rgba(108, 99, 255, 0.2); color: var(--primary); padding: 0.3rem 0.8rem; border-radius: 5px; margin-right: 0.5rem;">Leadership</span>
+                        <span class="tag"
+                            style="background: rgba(0, 191, 166, 0.2); color: var(--secondary); padding: 0.3rem 0.8rem; border-radius: 5px;">Team
+                            Building</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <h3>Campus Brand Ambassador - Corizo</h3>
+                    <p style="color: var(--secondary); margin: 0.5rem 0;">Jan 2025 | Nellore, Andhra Pradesh, India</p>
+                    <p>Represented Corizo on campus, driving brand awareness and facilitating workshops to enhance
+                        student skills in technology and professional development.</p>
+                    <div style="margin-top: 1rem;">
+                        <span class="tag"
+                            style="background: rgba(108, 99, 255, 0.2); color: var(--primary); padding: 0.3rem 0.8rem; border-radius: 5px; margin-right: 0.5rem;">Collaborative
+                            Leadership</span>
+                        <span class="tag"
+                            style="background: rgba(255, 101, 132, 0.2); color: var(--accent); padding: 0.3rem 0.8rem; border-radius: 5px;">Problem
+                            Solving</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+        <h2>EDUCATION</h2>
+        <div class="card" style="grid-column: 1/-1;">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Bachelor of Technology - Computer Science and Engineering</h3>
+                    <p style="color: var(--secondary); margin: 0.5rem 0;">Geethanjali Institute of Science and
+                        Technology | 2022 - Present</p>
+                    <p>Skills: Microsoft PowerPoint, Microsoft Word</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Intermediate (12th Grade)</h3>
+                    <p style="color: var(--secondary); margin: 0.5rem 0;">Sri Chaitanya Junior College, Nellore | Grade:
+                        92%</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Secondary School Certificate (10th Grade)</h3>
+                    <p style="color: var(--secondary); margin: 0.5rem 0;">Sri Geethanjali E.M High School, Nellore |
+                        Grade: 95%</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications">
+        <h2>CERTIFICATIONS</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>AI for Beginners</h3>
+                <p>HP LIFE | Issued Jun 2025</p>
+                <p>Skills: AI Basics</p>
+            </div>
+            <div class="card">
+                <h3>Effective Leadership</h3>
+                <p>HP LIFE | Issued Jun 2025</p>
+                <p>Skills: Effective Leadership</p>
+            </div>
+            <div class="card">
+                <h3>ChatGPT for Everyone</h3>
+                <p>HCL GUVI | Issued May 2025</p>
+                <p>Skills: ChatGPT</p>
+            </div>
+            <div class="card">
+                <h3>Digital Skills: User Experience</h3>
+                <p>Accenture | Issued May 2025</p>
+                <p>Skills: UX Design, User Experience (UX)</p>
+            </div>
+            <div class="card">
+                <h3>Introduction to Programming Using Python</h3>
+                <p>OneRoadmap | Issued Apr 2025 </p>
+                <p>Skills: Python (Programming Language)</p>
+            </div>
+            <div class="card">
+                <h3>Python 3.4.3</h3>
+                <p>Spoken Tutorial | Issued Apr 2025 </p>
+                <p>Skills: Python 3.4.3</p>
+            </div>
+            <div class="card">
+                <h3>RDBMS PostgreSQL</h3>
+                <p>Spoken Tutorial | Issued Apr 2025</p>
+                <p>Skills: RDBMS</p>
+            </div>
+            <div class="card">
+                <h3>TCSION Young Professional</h3>
+                <p>TCS iON | Issued Apr 2025</p>
+                <p>Skills: Communication, Presentation Skills, Soft Skills, Resume Writing, Group Discussions, Interview
+                    Skills Training</p>
+            </div>
+            <div class="card">
+                <h3>UX Design Introduction Job Simulation</h3>
+                <p>Forage | Issued Apr 2025</p>
+                <p>Skills: UX Design</p>
+            </div>
+            <div class="card">
+                <h3>Basics of Figma</h3>
+                <p>GDG MAD, Mumbai | Issued Jan 2025</p>
+                <p>Skills: Figma (Software)</p>
+            </div>
+            <div class="card">
+                <h3>Excel</h3>
+                <p>GDG MAD, Mumbai | Issued Jan 2025</p>
+                <p>Skills: Microsoft Excel</p>
+            </div>
+            <div class="card">
+                <h3>Git and GitHub</h3>
+                <p>GDG MAD, Mumbai | Issued Jan 2025 </p>
+                <p>Skills: GitHub</p>
+            </div>
+            <div class="card">
+                <h3>C Language</h3>
+                <p>Spoken Tutorial | Issued Mar 2024</p>
+                <p>Skills: C (Programming Language)</p>
+            </div>
+            <div class="card">
+                <h3>Introduction to Programming Using Java</h3>
+                <p>Spoken Tutorial | Issued Mar 2025</p>
+                <p>Skills: Core Java</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>PROJECTS</h2>
+        <div class="card-grid">
+            <a href="https://github.com/saikarthikeya97/Collaborative-Text-Editor" target="_blank"
+                class="card project-card">
+                <h3>Collaborative Text Editor 🧠💻</h3>
+                <p>A real-time collaborative editor built using the MERN stack, enabling live editing with Socket.IO and
+                    rich text formatting via Quill.js.</p>
+                <p><strong>Tech Used:</strong> React, Node.js, Express, MongoDB, Socket.IO, Quill.js</p>
+            </a>
+            <a href="https://github.com/saikarthikeya97/online-code-editor" target="_blank" class="card project-card">
+                <h3>Online Code Editor 💻⚙️</h3>
+                <p>A full-stack online code editor built with React and Node.js, integrated with Judge0 API for
+                    real-time code execution and Monaco Editor for multi-language support, featuring a clean and
+                    intuitive UI.</p>
+                <p><strong>Tech Used:</strong> React, Node.js, Express, MongoDB, Judge0 API, Monaco Editor</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- JavaScript for Three.js Background, Animations, Cursor Tilt, and Smooth Scrolling -->
+    <script type="text/javascript">
+        // Three.js Animated Particle Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('threejs-bg').appendChild(renderer.domElement);
+
+        const particles = new THREE.BufferGeometry();
+        const particleCount = 1000;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 150;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 150;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 150;
+
+            colors[i * 3] = Math.random();
+            colors[i * 3 + 1] = Math.random();
+            colors[i * 3 + 2] = Math.random();
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.3, vertexColors: true, transparent: true, opacity: 0.7 });
+
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        scene.add(particleSystem);
+
+        camera.position.z = 50;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particleSystem.rotation.y += 0.001;
+            particleSystem.rotation.x += 0.0005;
+
+            const positions = particleSystem.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3 + 1] += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                if (positions[i * 3 + 1] > 50) positions[i * 3 + 1] = -100;
+            }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        // Animate skill progress bars, cursor tilt, and smooth scrolling
+        document.addEventListener('DOMContentLoaded', () => {
+            // Skill progress bars
+            const progressBars = document.querySelectorAll('.skill-progress');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+
+            // Cursor tilt effect for sections and cards only
+            const tiltElements = document.querySelectorAll('section, .card');
+            tiltElements.forEach(element => {
+                element.addEventListener('mousemove', (e) => {
+                    const rect = element.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const mouseX = e.clientX - centerX;
+                    const mouseY = e.clientY - centerY;
+                    const rotateY = (mouseX / rect.width) * 3; // Max 3deg tilt
+                    const rotateX = -(mouseY / rect.height) * 3;
+                    element.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+
+                element.addEventListener('mouseleave', () => {
+                    element.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
+                });
+            });
+
+            // Smooth scrolling for nav buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = button.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        const navHeight = document.querySelector('nav').offsetHeight;
+                        const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - navHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
